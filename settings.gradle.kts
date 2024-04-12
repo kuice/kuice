@@ -19,3 +19,10 @@ project(":plugins:authentication:basic").name = "authentication-basic"
 
 include("plugins:authentication:jwt")
 project(":plugins:authentication:jwt").name = "authentication-jwt"
+
+// Examples
+include("examples:basic")
+include("examples:nested-routes")
+include("examples:authentication:basic")
+include("examples:authentication:jwt")
+include("examples:websocket")
