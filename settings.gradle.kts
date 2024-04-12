@@ -16,3 +16,6 @@ project(":plugins:authentication:core").name = "authentication-core"
 
 include("plugins:authentication:basic")
 project(":plugins:authentication:basic").name = "authentication-basic"
+
+include("plugins:authentication:jwt")
+project(":plugins:authentication:jwt").name = "authentication-jwt"
