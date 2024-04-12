@@ -2,6 +2,10 @@ rootProject.name = "kuice"
 
 include("core")
 
+// Web Socket Plugins
+include("plugins:websocket:core")
+project(":plugins:websocket:core").name = "websocket-core"
+
 // Serialization Plugins
 include("plugins:serialization:json")
 project(":plugins:serialization:json").name = "serialization-json"
