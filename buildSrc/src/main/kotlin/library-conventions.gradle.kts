@@ -1,6 +1,3 @@
-import gradle.kotlin.dsl.accessors._a568f78b412045bc377fc4283b656e34.implementation
-import gradle.kotlin.dsl.accessors._a568f78b412045bc377fc4283b656e34.testImplementation
-
 group = "com.ordina.kuice"
 version = "0.0.1"
 
