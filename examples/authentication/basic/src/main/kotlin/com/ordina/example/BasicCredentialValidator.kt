@@ -1,8 +1,8 @@
-package com.ordina.example
+package io.github.example
 
 import com.google.inject.Inject
-import com.ordina.kuice.CredentialValidator
 import com.typesafe.config.Config
+import io.github.kuice.CredentialValidator
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.auth.Principal
 import io.ktor.server.auth.UserIdPrincipal

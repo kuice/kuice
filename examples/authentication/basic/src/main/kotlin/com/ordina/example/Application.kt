@@ -1,10 +1,9 @@
 package com.ordina.example
 
-import com.ordina.kuice.authenticate
-import com.ordina.kuice.application
+import io.github.kuice.authenticate
 
 fun main() {
-    application {
+    io.github.kuice.application {
         routes {
             authenticate {
                 get<SimpleController>("/foo") { getX }

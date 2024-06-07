@@ -1,9 +1,7 @@
 package com.ordina.example
 
-import com.ordina.kuice.application
-
 fun main() {
-    application {
+    io.github.kuice.application {
         routes {
             route("nested-route") {
                 get<SimpleController>("/foo") { getFoo }

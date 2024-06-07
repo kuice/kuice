@@ -1,7 +1,7 @@
 package com.ordina.example
 
-import com.ordina.kuice.ktor.routes.ApplicationController
 import com.typesafe.config.Config
+import io.github.kuice.ktor.routes.ApplicationController
 import io.ktor.server.application.call
 import io.ktor.server.response.respond
 import jakarta.inject.Inject

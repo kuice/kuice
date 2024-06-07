@@ -1,9 +1,9 @@
 package com.ordina.example
 
-import com.ordina.kuice.application
+import io.github.kuice.application
 
 fun main() {
-    application {
+    io.github.kuice.application {
         routes {
             post<SimpleController>("/foo") { getX }
             get<SimpleController>("/bar") { getY }
