@@ -1,3 +1,5 @@
+import org.jreleaser.model.Active
+
 group = "io.github.kuice"
 version = "0.0.1"
 
@@ -7,6 +9,7 @@ plugins {
     signing
     kotlin("jvm")
     id("org.jlleitschuh.gradle.ktlint")
+    id("org.jreleaser")
 }
 
 repositories {
@@ -26,22 +29,28 @@ kotlin {
     jvmToolchain(jdkVersion = 17)
 }
 
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
 publishing {
     repositories {
         maven {
-            credentials {
-                username = project.findProperty("ossrh.username") as String? ?: System.getenv("OSSRH_USERNAME")
-                password = project.findProperty("ossrh.password") as String? ?: System.getenv("OSSRH_PASSWORD")
-            }
+            url = layout.buildDirectory.dir("staging-deploy").get().asFile.toURI()
         }
     }
 
     publications {
         create<MavenPublication>("maven") {
+            groupId = "io.github.kuice"
             artifactId = "kuice-${project.name}"
             from(components["kotlin"])
 
             pom {
+                url = "https://github.com/kuice/kuice"
+                inceptionYear = "2023"
+
                 licenses {
                     license {
                         name = "GNU General Public License v3.0"
@@ -61,6 +70,20 @@ publishing {
     }
 }
 
-signing {
-    sign(publishing.publications.findByName("maven"))
+jreleaser {
+    signing {
+        active.set(Active.ALWAYS)
+        armored = true
+    }
+
+    deploy {
+        maven {
+            mavenCentral {
+                create("maven-central") {
+                    active.set(Active.ALWAYS)
+                    url.set("https://s01.oss.sonatype.org/service/local")
+                }
+            }
+        }
+    }
 }
