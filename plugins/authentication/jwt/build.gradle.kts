@@ -9,13 +9,6 @@ repositories {
 dependencies {
     implementation(project(":core"))
     api(project(":plugins:authentication:authentication-core"))
-    api("io.ktor:ktor-server-auth-jwt:2.3.7")
+    api("io.ktor:ktor-server-auth-jwt")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
-}
-
-tasks.test {
-    useJUnitPlatform()
-}
-kotlin {
-    jvmToolchain(17)
 }

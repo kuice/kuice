@@ -1,9 +1,9 @@
+import org.jetbrains.kotlin.utils.findIsInstanceAnd
+
+description = "The core library for integrating KTOR with Guice"
+
 plugins {
     id("library-conventions")
-}
-
-repositories {
-    mavenCentral()
 }
 
 dependencies {
@@ -11,9 +11,9 @@ dependencies {
     implementation(kotlin("reflect"))
 
     // KTOR
-    api("io.ktor:ktor-server-core-jvm:2.3.7")
-    api("io.ktor:ktor-server-host-common-jvm:2.3.7")
-    api("io.ktor:ktor-server-netty-jvm:2.3.7")
+    api("io.ktor:ktor-server-core-jvm")
+    api("io.ktor:ktor-server-host-common-jvm")
+    api("io.ktor:ktor-server-netty-jvm")
 
     // Dependency Injection
     api("com.google.inject:guice:7.0.0")
@@ -21,3 +21,5 @@ dependencies {
     // Configuration
     api("com.typesafe:config:1.4.3")
 }
+
+

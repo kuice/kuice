@@ -8,13 +8,6 @@ repositories {
 
 dependencies {
     implementation(project(":core"))
-    api("io.ktor:ktor-server-auth:2.3.7")
+    api("io.ktor:ktor-server-auth")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
-}
-
-tasks.test {
-    useJUnitPlatform()
-}
-kotlin {
-    jvmToolchain(17)
 }

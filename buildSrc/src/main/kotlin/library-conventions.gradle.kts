@@ -1,4 +1,5 @@
 import org.jreleaser.model.Active
+import org.jreleaser.model.Signing
 
 group = "io.github.kuice"
 version = "0.0.1"
@@ -8,8 +9,10 @@ plugins {
     `maven-publish`
     signing
     kotlin("jvm")
+    id("io.ktor.plugin")
     id("org.jlleitschuh.gradle.ktlint")
     id("org.jreleaser")
+    id("org.jetbrains.dokka")
 }
 
 repositories {
@@ -26,12 +29,16 @@ tasks.test {
 }
 
 kotlin {
-    jvmToolchain(jdkVersion = 17)
+    jvmToolchain(17)
 }
 
 java {
     withJavadocJar()
     withSourcesJar()
+}
+
+val emptyJar = tasks.register<Jar>("emptyJar") {
+    archiveAppendix.set("empty")
 }
 
 publishing {
@@ -45,9 +52,20 @@ publishing {
         create<MavenPublication>("maven") {
             groupId = "io.github.kuice"
             artifactId = "kuice-${project.name}"
+
             from(components["kotlin"])
 
+            artifact(emptyJar) {
+                classifier = "javadoc"
+            }
+
+            artifact(emptyJar) {
+                classifier = "sources"
+            }
+
             pom {
+                name = artifactId
+                description = "Kuice is a set of libraries to easily integrate Guice with the Ktor framework"
                 url = "https://github.com/kuice/kuice"
                 inceptionYear = "2023"
 
@@ -65,23 +83,49 @@ publishing {
                         email = "donovan.de.kuiper@ordina.nl"
                     }
                 }
+
+                scm {
+                    connection = "scm:git:git@github.com:kuice/kuice.git"
+                    developerConnection = "scm:git:git@github.com:kuice/kuice.git"
+                    url = "https://github.com/kuice/kuice"
+                }
             }
         }
     }
 }
 
 jreleaser {
+    gitRootSearch = true
+
     signing {
         active.set(Active.ALWAYS)
+        setMode(Signing.Mode.COMMAND.name)
         armored = true
+        verify = false
+
+        passphrase = System.getenv("KUICE_GPG_PASSPHRASE")
+
+        command {
+            homeDir = System.getenv("KUICE_GPG_HOME") ?: "/Users/donovan/.gnupg"
+        }
+    }
+
+    release {
+        github {
+            token = System.getenv("KUICE_GITHUB_TOKEN")
+        }
     }
 
     deploy {
         maven {
             mavenCentral {
-                create("maven-central") {
+                create("sonatype") {
                     active.set(Active.ALWAYS)
-                    url.set("https://s01.oss.sonatype.org/service/local")
+                    url.set("https://central.sonatype.com/api/v1/publisher")
+                    stagingRepository("build/staging-deploy")
+                    username = System.getenv("KUICE_SONATYPE_USERNAME")
+                    password = System.getenv("KUICE_SONATYPE_PASSWORD")
+                    retryDelay = 30
                 }
             }
         }

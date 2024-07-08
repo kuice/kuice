@@ -1,7 +1,7 @@
 rootProject.name = "kuice"
 
 include("core")
-include("test")
+//include("test")
 
 // Web Socket Plugins
 include("plugins:websocket:core")
