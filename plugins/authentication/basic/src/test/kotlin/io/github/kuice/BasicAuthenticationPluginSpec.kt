@@ -2,6 +2,9 @@ package io.github.kuice
 
 import com.google.inject.Inject
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.shouldBe
+import io.ktor.client.request.get
+import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.call
 import io.ktor.server.auth.Principal
@@ -17,9 +20,9 @@ class BasicAuthenticationPluginSpec : WordSpec({
                 routes {
                     get("endpoint") { call.respond("Welcome") }
                 }
-//                val response = client.get("http://localhost:12346/endpoint")
-//
-//                response.status shouldBe HttpStatusCode.Unauthorized
+
+                val response = client.get("/endpoint")
+                response.status shouldBe HttpStatusCode.Unauthorized
             }
         }
 

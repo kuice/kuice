@@ -2,12 +2,8 @@ plugins {
     id("library-conventions")
 }
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    implementation(project(":core"))
+    implementation(project(":kuice-core"))
     api("io.ktor:ktor-server-auth")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 }

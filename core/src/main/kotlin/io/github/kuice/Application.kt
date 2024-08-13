@@ -21,21 +21,31 @@ import org.slf4j.LoggerFactory
 
 internal val applicationLogger = LoggerFactory.getLogger("io.github.kuice.Application")
 
-interface ApplicationScope {
-    val routeRegistry: io.github.kuice.Registry<Route>
-    fun routes(f: RouteScope.() -> Unit) = f.invoke(RouteScope(routeRegistry))
+class ApplicationScope(private val registry: Registry<Route>) {
+    fun routes(configure: RouteScope.() -> Unit) = configure(RouteScope(registry))
 }
 
+/**
+ * ```kotlin
+ * application {
+ *     routes {
+ *         get("/greeting") {
+ *             call.respondText("Hello, world")
+ *         }
+ *     }
+ * }
+ * ```
+ */
 fun application(
-    f: ApplicationScope.() -> Unit,
+    configure: ApplicationScope.() -> Unit,
 ) =
-    Application.invoke(ConfigFactory.load(), f)
+    Application.invoke(ConfigFactory.load(), configure)
         .start(wait = true)
 
 class Application private constructor(
     private val config: Config,
     private val injector: Injector,
-    private val loadApplication: ApplicationScope.() -> Unit,
+    private val configure: ApplicationScope.() -> Unit,
 ) {
     private val engine = injector.getInstance<ApplicationEngine>()
 
@@ -65,11 +75,9 @@ class Application private constructor(
             }
         }
 
-        val routeRegistry = object : Registry<Route>() {}
+        val routeRegistry = Registry.create<Route>()
 
-        loadApplication(object : ApplicationScope {
-            override val routeRegistry: Registry<Route> = routeRegistry
-        })
+        configure(ApplicationScope(routeRegistry))
 
         engine.application.apply {
             routing {

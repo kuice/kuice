@@ -4,6 +4,7 @@ description = "The core library for integrating KTOR with Guice"
 
 plugins {
     id("library-conventions")
+    id("org.jetbrains.dokka")
 }
 
 dependencies {

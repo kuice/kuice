@@ -10,7 +10,7 @@ fun RouteScope.authenticate(
     optional: Boolean = false,
     f: RouteScope.() -> Unit,
 ) {
-    val authenticatedRegistry = object : Registry<Route>() { }
+    val authenticatedRegistry = Registry.create<Route>()
     val childScope = RouteScope(authenticatedRegistry)
 
     f(childScope)

@@ -37,10 +37,10 @@ data class ApplicationConfiguration(
     val port: Int,
 )
 
-class ApplicationConfigProvider @Inject constructor(config: Config) :
+internal class ApplicationConfigProvider @Inject constructor(config: Config) :
     ConfigProvider<ApplicationConfiguration>(ApplicationConfigLoader, config)
 
-object ApplicationConfigLoader :
+internal object ApplicationConfigLoader :
     ConfigLoader<ApplicationConfiguration>("ktor", {
         ApplicationConfiguration(
             engine = getString("engine"),

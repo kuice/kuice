@@ -51,7 +51,6 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             groupId = "io.github.kuice"
-            artifactId = "kuice-${project.name}"
 
             from(components["kotlin"])
 

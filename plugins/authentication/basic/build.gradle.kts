@@ -5,8 +5,9 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":core"))
+    implementation(project(":kuice-core"))
 
-    api(project(":plugins:authentication:authentication-core"))
-//    testImplementation(project(":test"))
+    api(project(":plugins:authentication:kuice-authentication-core"))
+
+    testImplementation(project(":kuice-test"))
 }
