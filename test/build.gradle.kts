@@ -3,8 +3,8 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":core"))
-    implementation("io.ktor:ktor-client-cio:2.3.9")
+    implementation(project(":kuice-core"))
+    implementation("io.ktor:ktor-client-cio")
 
-    api("io.ktor:ktor-client-core:2.3.9")
+    api("io.ktor:ktor-client-core")
 }
