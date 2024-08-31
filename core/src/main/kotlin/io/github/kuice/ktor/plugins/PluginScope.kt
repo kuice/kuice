@@ -4,6 +4,9 @@ import io.github.kuice.Registry
 import io.ktor.server.application.Application
 import io.ktor.server.application.Plugin
 
+/**
+ * A scope to which allows the installation of standard KTOR plugins
+ */
 class PluginScope(private val registry: Registry<BasePlugin<Application, *, *>>) {
 
     fun <B: Any, F: Any> install(plugin: Plugin<Application, B, F>, configure: B.() -> Unit = {}) {

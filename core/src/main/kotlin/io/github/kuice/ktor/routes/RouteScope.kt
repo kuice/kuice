@@ -8,13 +8,29 @@ import io.ktor.server.routing.post
 import io.ktor.server.routing.put
 import io.ktor.server.routing.route
 
+/**
+ * A scope which allows the registration of routes
+ */
 class RouteScope(val registry: Registry<Route>) {
 
+    /**
+     * Builds a route to match GET requests with the specified [path].
+     *
+     * @param T The type of the class which contains the function defined in [getRequestHandler]
+     * @param path The path
+     * @param getRequestHandler
+     */
     inline fun <reified T> get(path: String, noinline getRequestHandler: T.() -> RequestHandler) =
         registry.register(
             InjectedBaseRoute(getRequestHandler, { handler -> { this.get(path, handler) } }, T::class.java),
         )
 
+    /**
+     * Builds a route to match GET requests with the specified [path].
+     *
+     * @param path
+     * @param requestHandler
+     */
     fun get(path: String, requestHandler: RequestHandler) =
         registry.register(
             PlainBaseRoute(requestHandler) { handler -> { this.get(path, handler) } },

@@ -28,6 +28,14 @@ tasks.test {
     useJUnitPlatform()
 }
 
+tasks.register<Jar>("dokkaJavadocJar") {
+    dependsOn(tasks.dokkaJavadoc)
+    group = "documentation"
+
+    from(tasks.dokkaJavadoc.flatMap { it.outputDirectory })
+    archiveClassifier.set("javadoc")
+}
+
 kotlin {
     jvmToolchain(17)
 }
@@ -54,9 +62,7 @@ publishing {
 
             from(components["kotlin"])
 
-            artifact(emptyJar) {
-                classifier = "javadoc"
-            }
+            artifact(tasks.getByName("dokkaJavadocJar"))
 
             artifact(emptyJar) {
                 classifier = "sources"

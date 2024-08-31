@@ -17,6 +17,15 @@ import io.ktor.server.auth.basic
 import org.slf4j.LoggerFactory
 
 private val logger = LoggerFactory.getLogger("io.github.kuice.authentication.basic")
+
+/**
+ * ```conf
+ * ktor.authentication.basic {
+ *   realm = "io.github.kuice"
+ *   validator = ""
+ * }
+ * ```
+ */
 class BasicAuthenticationPlugin @Inject constructor(config: BasicAuthenticationConfig) :
     BaseApplicationPluginWithInjector<AuthenticationConfig, Authentication>(
         Authentication,

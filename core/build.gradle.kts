@@ -1,10 +1,7 @@
-import org.jetbrains.kotlin.utils.findIsInstanceAnd
-
 description = "The core library for integrating KTOR with Guice"
 
 plugins {
     id("library-conventions")
-    id("org.jetbrains.dokka")
 }
 
 dependencies {
@@ -22,5 +19,3 @@ dependencies {
     // Configuration
     api("com.typesafe:config:1.4.3")
 }
-
-
