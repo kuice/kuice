@@ -20,6 +20,7 @@ import io.ktor.server.websocket.webSocket
 import java.time.Duration
 
 typealias WebSocketRequestHandler = suspend DefaultWebSocketServerSession.() -> Unit
+typealias BaseWebSocketController = BaseController<WebSocketRequestHandler>
 
 class WebSocketPlugin @Inject constructor(
     config: WebSocketConfiguration,
@@ -55,6 +56,12 @@ object WebSocketConfigLoader :
         )
     })
 
+inline fun <reified T> RouteScope.ws(
+    path: String,
+    protocol: String? = null,
+    noinline getRequestHandler: T.() -> WebSocketRequestHandler,
+) = webSocket(path, protocol, getRequestHandler)
+
 inline fun <reified T> RouteScope.webSocket(
     path: String,
     protocol: String? = null,
@@ -65,4 +72,4 @@ inline fun <reified T> RouteScope.webSocket(
     )
 }
 
-interface BaseWebSocketController : BaseController<WebSocketRequestHandler>
+
