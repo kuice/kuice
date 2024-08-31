@@ -2,17 +2,17 @@ import org.jreleaser.model.Active
 import org.jreleaser.model.Signing
 
 group = "io.github.kuice"
-version = "0.0.1"
+version = "0.0.2-SNAPSHOT"
 
 plugins {
+    kotlin("jvm")
     `java-library`
     `maven-publish`
     signing
-    kotlin("jvm")
-    id("io.ktor.plugin")
     id("org.jlleitschuh.gradle.ktlint")
     id("org.jreleaser")
     id("org.jetbrains.dokka")
+
 }
 
 repositories {
@@ -20,6 +20,7 @@ repositories {
 }
 
 dependencies {
+    implementation(platform("io.ktor:ktor-bom:2.3.12"))
     testImplementation("io.kotest:kotest-runner-junit5:5.8.1")
     testImplementation("io.kotest:kotest-assertions-core:5.8.1")
 }
@@ -29,11 +30,10 @@ tasks.test {
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(21)
 }
 
 java {
-    withJavadocJar()
     withSourcesJar()
 }
 
@@ -44,7 +44,7 @@ val emptyJar = tasks.register<Jar>("emptyJar") {
 publishing {
     repositories {
         maven {
-            url = layout.buildDirectory.dir("staging-deploy").get().asFile.toURI()
+            url = uri(layout.buildDirectory.dir("staging-deploy"))
         }
     }
 
