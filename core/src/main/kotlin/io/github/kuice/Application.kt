@@ -9,11 +9,13 @@ import io.github.kuice.config.getOptional
 import io.github.kuice.guice.getInstance
 import io.github.kuice.ktor.plugins.BaseApplicationPluginWithRoutes
 import io.github.kuice.ktor.plugins.BasePlugin
+import io.github.kuice.ktor.plugins.PluginScope
 import io.github.kuice.ktor.routes.InjectedRoute
 import io.github.kuice.ktor.routes.PlainRoute
 import io.github.kuice.ktor.routes.Route
 import io.github.kuice.ktor.routes.RouteScope
 import io.ktor.server.application.ApplicationCall
+import io.ktor.server.application.install
 import io.ktor.server.engine.ApplicationEngine
 import io.ktor.server.routing.routing
 import io.ktor.util.pipeline.Pipeline
@@ -21,8 +23,12 @@ import org.slf4j.LoggerFactory
 
 internal val applicationLogger = LoggerFactory.getLogger("io.github.kuice.Application")
 
-class ApplicationScope(private val registry: Registry<Route>) {
-    fun routes(configure: RouteScope.() -> Unit) = configure(RouteScope(registry))
+open class ApplicationScope(
+    private val routeRegistry: Registry<Route>,
+    private val pluginRegistry: Registry<BasePlugin<io.ktor.server.application.Application, *, *>>
+) {
+    fun routes(configure: RouteScope.() -> Unit) = configure(RouteScope(routeRegistry))
+    fun plugins(configure: PluginScope.() -> Unit) = configure(PluginScope(pluginRegistry))
 }
 
 /**
@@ -48,6 +54,9 @@ class Application private constructor(
     private val configure: ApplicationScope.() -> Unit,
 ) {
     private val engine = injector.getInstance<ApplicationEngine>()
+
+    private val routeRegistry = Registry.create<Route>()
+    private val pluginRegistry = Registry.create<BasePlugin<io.ktor.server.application.Application, *, *>>()
 
     companion object {
         fun invoke(config: Config, loadApplication: ApplicationScope.() -> Unit): Application {
@@ -75,11 +84,13 @@ class Application private constructor(
             }
         }
 
-        val routeRegistry = Registry.create<Route>()
-
-        configure(ApplicationScope(routeRegistry))
+        configure(ApplicationScope(routeRegistry, pluginRegistry))
 
         engine.application.apply {
+            pluginRegistry.values().forEach { plugin ->
+                plugin.install(injector, this)
+            }
+
             routing {
                 routeRegistry.values().forEach {
                     when (it) {
